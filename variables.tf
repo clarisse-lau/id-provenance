@@ -60,3 +60,15 @@ variable "time_zone" {
   description = "Time zone to specify for job scheduler"
   default     = "America/New_York"
 }
+
+variable "function_name" {
+  type        = string
+  description = "Name of Google Cloud Function"
+  default     = null
+}
+
+variable "topic_name" {
+  type        = string
+  description = "Name of pubsub topic used to trigger lambda function"
+  default     = null
+}

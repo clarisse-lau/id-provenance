@@ -16,3 +16,9 @@ job_name =  "id-prov-bq-trigger"
 job_description = "Updates ID Provenance BigQuery table `htan-dcc.id_provenance.upstream_ids`. Run 'update-bq-metadata-tables-scheduler-trigger' first to use up-to-date tables"
 job_schedule = "0 3 * * *"
 time_zone = "America/New_York"
+
+# function variables
+function_name = "id-prov-function"
+
+# pubsub topic variables
+topic_name = "id-prov-topic"

@@ -18,7 +18,7 @@ resource "google_storage_bucket_object" "zip" {
 
 resource "google_pubsub_topic" "default" {
   project = var.project_id
-  name = "id-prov-topic"
+  name = var.topic_name
 }
 
 resource "google_cloud_scheduler_job" "job" {
@@ -41,7 +41,7 @@ resource "google_cloud_scheduler_job" "job" {
 
 resource "google_cloudfunctions2_function" "default" {
   project     = var.project_id
-  name        = "id-prov-function"
+  name        = var.function_name
   location    = var.region
   description = "Google Cloud Function to Update ID Provenance BigQuery table"
 
