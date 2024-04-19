@@ -5,7 +5,7 @@ data "archive_file" "source" {
   output_path = "${path.module}/function.zip"
 }
 
-# Add source code zip to the Cloud Function's bucket (Cloud_function_bucket) 
+# Add source code zip to the Cloud Functions bucket (dcc-cloud-functions) 
 resource "google_storage_bucket_object" "zip" {
   source       = data.archive_file.source.output_path
   content_type = "application/zip"
@@ -24,17 +24,16 @@ resource "google_pubsub_topic" "default" {
 resource "google_cloud_scheduler_job" "job" {
   project = var.project_id
   region = var.region
-  name        = "id-prov-bq-trigger"
-  description = "Updates ID Provenance BigQuery table `htan-dcc.id_provenance.upstream_ids`. Run 'update-bq-metadata-tables-scheduler-trigger' first to use up-to-date tables"
-  schedule    = "0 3 * * *"
-  time_zone   = "America/New_York"
+  name        = var.job_name
+  description = var.job_description
+  schedule    = var.job_schedule
+  time_zone   = var.time_zone
 
   retry_config {
     retry_count = 3
   }
 
   pubsub_target {
-    # topic.id is the topic's full resource name.
     topic_name = "${google_pubsub_topic.default.id}"
     data       = base64encode("test")
   }
@@ -70,7 +69,7 @@ resource "google_cloudfunctions2_function" "default" {
     }
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
     all_traffic_on_latest_revision = true
-    service_account_email          = var.function_sa
+    service_account_email          = "${google_service_account.sa.email}"
   }
 
   event_trigger {
@@ -79,5 +78,6 @@ resource "google_cloudfunctions2_function" "default" {
     pubsub_topic   = google_pubsub_topic.default.id
     retry_policy   = "RETRY_POLICY_RETRY"
   }
+  depends_on = [resource.google_service_account.sa]
 }
 
