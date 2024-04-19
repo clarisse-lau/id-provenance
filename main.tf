@@ -26,7 +26,7 @@ resource "google_cloud_scheduler_job" "job" {
   region = var.region
   name        = "id-prov-bq-trigger"
   description = "Updates ID Provenance BigQuery table `htan-dcc.id_provenance.upstream_ids`. Run 'update-bq-metadata-tables-scheduler-trigger' first to use up-to-date tables"
-  schedule    = "0 3 * * 1-5"
+  schedule    = "0 3 * * *"
   time_zone   = "America/New_York"
 
   retry_config {
