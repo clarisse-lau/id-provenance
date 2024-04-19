@@ -49,7 +49,7 @@ def func(data, context):
     `htan-dcc.combined_assays.INFORMATION_SCHEMA.COLUMNS`
     """).result().to_dataframe()
 
-    bq_schema = json.load(open('column_descriptions.json'))
+    bq_schema = json.load(open('schema.json'))
 
     f = pd.DataFrame()
 
@@ -102,7 +102,7 @@ def func(data, context):
     print( ' Walking parent file ancestry ' )
     print( '' )
 
-    # join level 1-4 IDs
+    # join on parent IDs. HTAN assays currently have at most 4 levels
     f = (
         f.merge(f[['HTAN_Data_File_ID','HTAN_Parent_Data_File_ID']], 
                 left_on='HTAN_Parent_Data_File_ID',
